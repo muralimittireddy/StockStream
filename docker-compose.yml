@@ -157,6 +157,23 @@ services:
     restart: unless-stopped
     networks:
       - kafka-net
+  
+  clickhouse:
+    image: docker.io/bitnami/clickhouse:25
+    container_name: clickhouse-server
+    environment:
+      CLICKHOUSE_DB: stock
+      CLICKHOUSE_USER: user
+      CLICKHOUSE_PASSWORD: user_password
+    ports:
+      - "8123:8123"
+      - "9000:9000" 
+    volumes:
+      - clickhouse_data:/bitnami/clickhouse
+
+volumes:
+  clickhouse_data:
+    driver: local
 
 networks:
   kafka-net:
