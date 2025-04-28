@@ -50,8 +50,8 @@ Upcoming features:
     
 3.Access:
 
-  Spark Master UI: http://localhost:8080
+  - Spark Master UI: http://localhost:8080
       
-  ClickHouse UI (if set up): http://localhost:8123
+  - ClickHouse UI (if set up): http://localhost:8123
       
-  Kafka Broker: http://localhost:29092
+  - Kafka Broker: http://localhost:29092
