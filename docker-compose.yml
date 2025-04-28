@@ -124,13 +124,23 @@ services:
 
   # Spark Submit (for running the consumer script and printing to console)
   spark-submit:
-    image: docker.io/bitnami/spark:3.3
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
     container_name: spark_submit
     # environment:
     # No additional environment variables needed for this task
     volumes:
-      - ./:/app/ # Mount your Spark Streaming app
-    command: [ "sh", "-c", "pip install -r /app/requirements.txt && spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3 --master spark://spark-master:7077 /app/consumer/consumer.py" ]
+      - ./consumer:/app/ # Mount your Spark Streaming app
+    command: [
+      "sh", "-c",
+      "pip install -r /app/requirements.txt && \
+      spark-submit  --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.3,com.clickhouse.spark:clickhouse-spark-runtime-3.3_2.12:0.8.0,com.clickhouse:clickhouse-jdbc:0.6.3 \
+      --jars /opt/jars/clickhouse-jdbc-0.6.3-all.jar,/opt/jars/clickhouse-spark-runtime-3.3_2.12-0.8.0.jar \
+      --conf spark.driver.extraClassPath=/opt/jars/* \
+      --conf spark.executor.extraClassPath=/opt/jars/* \
+      --master spark://spark-master:7077 \
+      /app/consumer.py"]
     depends_on:
       - spark-master # Ensure Spark Master is up before submitting the job
       - broker # Ensure Kafka is up before submitting the job
@@ -160,7 +170,7 @@ services:
   
   clickhouse:
     image: docker.io/bitnami/clickhouse:25
-    container_name: clickhouse-server
+    container_name: clickhouse
     environment:
       CLICKHOUSE_DB: stock
       CLICKHOUSE_USER: user
@@ -170,6 +180,9 @@ services:
       - "9000:9000" 
     volumes:
       - clickhouse_data:/bitnami/clickhouse
+      - ./clickhouse_init:/docker-entrypoint-initdb.d/
+    networks:
+      - kafka-net
 
 volumes:
   clickhouse_data:

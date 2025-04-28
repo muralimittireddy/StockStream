@@ -1,0 +1,22 @@
+# Use the Bitnami Spark base image
+FROM docker.io/bitnami/spark:3.3
+
+# Switch to root (bitnami/spark runs as non-root by default)
+USER root
+
+# Install wget
+RUN install_packages wget
+
+# Create a jars folder
+RUN mkdir -p /opt/jars
+
+# Download the ClickHouse jars
+RUN wget -P /opt/jars https://repo1.maven.org/maven2/com/clickhouse/clickhouse-jdbc/0.6.3/clickhouse-jdbc-0.6.3-all.jar && \
+    wget -P /opt/jars https://repo1.maven.org/maven2/com/clickhouse/spark/clickhouse-spark-runtime-3.3_2.12/0.8.0/clickhouse-spark-runtime-3.3_2.12-0.8.0.jar
+
+
+# Switch back to default user
+USER 1001
+
+# Default working directory
+WORKDIR /app
