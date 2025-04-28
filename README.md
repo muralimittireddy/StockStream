@@ -54,4 +54,4 @@ Upcoming features:
   
   ClickHouse UI (if set up): http://localhost:8123
   
-  Kafka Broker: localhost:29092
+  Kafka Broker: http://localhost:29092
