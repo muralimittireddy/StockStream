@@ -1,5 +1,4 @@
 # StockStream
-# Stock and Crypto Streaming Platform 🚀
 
 A real-time data processing platform built with **Apache Spark**, **Kafka**, **ClickHouse**, and **Docker**. The project is designed to consume, process, and store live stock and cryptocurrency market data, with plans to incorporate advanced analytics and alerting.
 
