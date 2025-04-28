@@ -36,3 +36,22 @@ Upcoming features:
 - **Slack API / SMTP** (planned) - For real-time alerting.
 
 ---
+
+## 🐳 Quick Start (Running Locally)
+
+1.Clone the repository:
+
+    git clone https://github.com/muralimittireddy/StockStream.git
+    cd StockStream
+    
+2.Start services using Docker Compose:
+
+    docker-compose up --build
+    
+3.Access:
+
+  Spark Master UI: http://localhost:8080
+  
+  ClickHouse UI (if set up): http://localhost:8123
+  
+  Kafka Broker: localhost:29092
