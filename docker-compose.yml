@@ -89,7 +89,7 @@ services:
   producer:
     build:
       context: ./producer
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile.producer
     container_name: kafka-producer
     depends_on:
       broker:
@@ -126,7 +126,7 @@ services:
   spark-submit:
     build:
       context: ./consumer
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile.consumer
     container_name: spark_submit
     # environment:
     # No additional environment variables needed for this task
