@@ -180,7 +180,6 @@ services:
       - "9000:9000" 
     volumes:
       - clickhouse_data:/bitnami/clickhouse
-      - ./clickhouse_init:/docker-entrypoint-initdb.d/
     networks:
       - kafka-net
 
