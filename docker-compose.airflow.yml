@@ -36,7 +36,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR}/plugins:/opt/airflow/plugins
-
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on: &airflow-common-depends-on
     redis:
@@ -44,7 +43,7 @@ x-airflow-common:
     postgres:
       condition: service_healthy
   networks:
-    - spark-network
+      - kafka-net
   extra_hosts:
     - "metadata.google.internal:169.254.169.254"
 
@@ -64,7 +63,7 @@ services:
       start_period: 5s
     restart: always
     networks:
-      - spark-network
+      - kafka-net
 
   redis:
     # Redis is limited to 7.2-bookworm due to licencing change
@@ -80,7 +79,7 @@ services:
       start_period: 30s
     restart: always
     networks:
-      - spark-network
+      - kafka-net
 
   airflow-webserver:
     <<: *airflow-common
@@ -99,7 +98,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
     networks:
-      - spark-network
+      - kafka-net
 
   airflow-scheduler:
     <<: *airflow-common
@@ -121,7 +120,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
     networks:
-      - spark-network
+      - kafka-net
 
   airflow-worker:
     <<: *airflow-common
@@ -151,7 +150,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
     networks:
-      - spark-network
+      - kafka-net
 
   airflow-init:
     <<: *airflow-common
@@ -231,8 +230,7 @@ services:
       - airflow
 
 networks:
-  spark-network:
-    driver: bridge
+  kafka-net:
 
 volumes:
   postgres-volume:

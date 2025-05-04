@@ -33,6 +33,7 @@ def create_ohlcv_table():
         category String
     ) ENGINE = MergeTree()
     ORDER BY (symbol, timestamp)
+    TTL timestamp + INTERVAL 1 DAY;
     ''')
     print("ClickHouse table is ready.")
 
