@@ -3,17 +3,36 @@ from kafka import KafkaProducer
 from kafka.admin import KafkaAdminClient, NewTopic
 import json
 import time
+import os
+
+
+
+print("Producer script started")
+print(f"Connecting to Kafka at {os.getenv('BOOTSTRAP_SERVERS')}")
+
 
 # Initialize Kafka Producer
-producer = KafkaProducer(
-    bootstrap_servers='broker:29092',  # Kafka server
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
-)
+try:
+    producer = KafkaProducer(
+        bootstrap_servers='broker:29092',
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
+    print("Kafka producer created successfully")
+except Exception as e:
+    print(f"Failed to create Kafka producer: {e}")
+    time.sleep(10)
+    exit(1)
 
-# Initialize Kafka AdminClient for topic creation
-admin_client = KafkaAdminClient(
-    bootstrap_servers='broker:29092'
-)
+# Kafka Admin
+try:
+    admin_client = KafkaAdminClient(
+        bootstrap_servers='broker:29092'
+    )
+except Exception as e:
+    print(f"Failed to create Kafka AdminClient: {e}")
+    time.sleep(10)
+    exit(1)
+
 
 # Define the stock symbols you want to fetch
 # Symbol groups
