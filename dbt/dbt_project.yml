@@ -1,0 +1,9 @@
+name: 'ohlcv_dbt'
+version: '1.0'
+config-version: 2
+
+profile: 'ohlcv_profile'
+
+models:
+  ohlcv_dbt:
+    +materialized: table

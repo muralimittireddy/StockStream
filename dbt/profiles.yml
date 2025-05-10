@@ -1,0 +1,9 @@
+ohlcv_profile:
+  target: prod
+  outputs:
+    prod:
+      type: bigquery
+      method: oauth
+      project: solarcropsanalysis-454507
+      dataset: ohlcv_dataset
+      threads: 1

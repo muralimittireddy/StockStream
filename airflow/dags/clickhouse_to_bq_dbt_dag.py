@@ -15,9 +15,14 @@ with DAG(
         python_callable=ingest_data,
     )
 
-    # dbt = BashOperator(
-    #     task_id='run_dbt_transforms',
-    #     bash_command='/opt/scripts/dbt_runner.sh',
-    # )
+    initate_dbt_task = BashOperator(
+    task_id='dbt_deps',
+    bash_command='cd /dbt && dbt deps --profiles-dir . --target prod'
+    )
 
-    ingest_task
+    execute_dbt_task = BashOperator(
+        task_id='dbt_run_ohlcv_models',
+        bash_command='cd /dbt && dbt run --select stg_ohlcv agg_daily_ohlcv --profiles-dir . --target prod'
+    )
+
+    ingest_task >> initate_dbt_task >> execute_dbt_task
