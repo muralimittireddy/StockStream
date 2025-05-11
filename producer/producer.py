@@ -4,7 +4,7 @@ from kafka.admin import KafkaAdminClient, NewTopic
 import json
 import time
 import os
-
+import pandas as pd 
 
 
 print("Producer script started")
@@ -72,7 +72,7 @@ def get_stock_data(symbol):
     data = stock.history(period="1d", interval="1m").tail(1)  # Only get the latest record
     if data.empty:
         print(f"No data for {symbol}")
-        return []
+        return pd.DataFrame() 
     return data 
 
 # Ingest data into Kafka every minute
