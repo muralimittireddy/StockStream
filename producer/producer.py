@@ -2,9 +2,17 @@ import yfinance as yf
 from kafka import KafkaProducer
 from kafka.admin import KafkaAdminClient, NewTopic
 import json
-import time
 import os
 import pandas as pd 
+from datetime import datetime, time
+from pytz import timezone
+import time as systime
+
+
+def is_market_open():
+    eastern = timezone('US/Eastern')
+    now = datetime.now(eastern)
+    return now.weekday() < 5 and time(9, 30) <= now.time() < time(16, 0)
 
 
 print("Producer script started")
@@ -41,7 +49,7 @@ topics_data = {
     "crypto_currency": ["BTC-USD", "ETH-USD", "XRP-USD", "DOGE-USD", "ADA-USD", "SOL-USD", "DOT-USD", "LTC-USD", "AVAX-USD", "SHIB-USD"],
     "indices": ["^GSPC", "^NDX", "^DJI", "^FTSE", "^N225", "^GDAXI", "^FCHI", "^HSI", "^AXJO", "^NSEI"],
     "etfs": ["SPY", "QQQ", "IWM", "VTI", "VOO", "EEM", "ARKK", "GLD", "VEU", "ACWX"],
-    "currencies": ["EURUSD=X", "GBPUSD=X", "JPY=X", "EURGBP=X", "AUDUSD=X", "CAD=X", "CHF=X", "CNY=X", "INR=X", "MXN=X"]
+    "currencies": ["EURUSD=X", "GBPUSD=X", "JPY=X", "EURGBP=X", "AUDUSD=X", "CAD=X", "CHF=X", "NZDUSD=X", "INR=X", "MXN=X"]
 }
 
 # Function to create Kafka topic with custom configurations if it doesn't exist
@@ -72,13 +80,17 @@ def get_stock_data(symbol):
     data = stock.history(period="1d", interval="1m").tail(1)  # Only get the latest record
     if data.empty:
         print(f"No data for {symbol}")
-        return pd.DataFrame() 
+        return pd.DataFrame()
     return data 
 
 # Ingest data into Kafka every minute
 while True:
     for topic, symbols in topics_data.items():
-        # Ensure the topic exists or create it
+        # Skip non-crypto topics outside market hours
+        if topic != "crypto_currency" and not is_market_open():
+            print(f"Market closed. Skipping topic: {topic}")
+            continue
+
         create_topic_if_not_exists(topic)
         for symbol in symbols:
             stock_data = get_stock_data(symbol)
@@ -95,8 +107,8 @@ while True:
                     "volume": row["Volume"]
                 }
                 print(f"Sending to topic: {topic} => {payload}")
-                # Send data with symbol as key to ensure consistent partitioning
                 producer.send(topic, key=symbol.encode('utf-8'), value=payload)
             else:
                 print(f"No data received for {symbol}")
-    time.sleep(60)  # Sleep before next round
+    
+    systime.sleep(60)

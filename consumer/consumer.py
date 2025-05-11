@@ -73,6 +73,11 @@ processed_df = df_json_with_category.select(
 )
 
 def write_to_clickhouse(batch_df, batch_id):
+    print("=== BATCH ===")
+    print(f"Writing batch: {batch_id} - Count: {batch_df.count()}")
+    batch_df.printSchema()
+    batch_df.show(truncate=False)
+
     batch_df.write \
         .format("jdbc") \
         .option("url", "jdbc:clickhouse://clickhouse:8123/stock") \

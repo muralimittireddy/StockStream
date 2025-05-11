@@ -130,8 +130,8 @@ services:
     container_name: spark_submit
     # environment:
     # No additional environment variables needed for this task
-    volumes:
-      - ./consumer:/app/ # Mount your Spark Streaming app
+    # volumes:
+    #   - ./consumer:/app/ # Mount your Spark Streaming app
     command: [
       "sh", "-c",
       "pip install -r /app/requirements.txt && \
