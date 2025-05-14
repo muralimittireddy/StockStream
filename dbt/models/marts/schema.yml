@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: top_movers
+    description: >
+      Top 5 gainers and losers per category (stock, etf, indice, currency, crypto) for each day.
+    columns:
+      - name: symbol
+        description: Ticker symbol of the asset.
+      - name: category
+        description: Category of the asset.
+      - name: trade_day
+        description: Date of the trading session.
+      - name: open_price
+        description: Opening price.
+      - name: close_price
+        description: Closing price.
+      - name: return_pct
+        description: Percentage return (close - open) / open.
+      - name: gain_rank
+        description: Rank among top gainers (1 is highest).
+      - name: loss_rank
+        description: Rank among top losers (1 is lowest).
