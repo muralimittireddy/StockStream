@@ -4,6 +4,14 @@ config-version: 2
 
 profile: 'ohlcv_profile'
 
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target"]
+
 models:
   ohlcv_dbt:
     +materialized: table
+    staging:
+      +materialized: view
+    marts:
+      +materialized: incremental
