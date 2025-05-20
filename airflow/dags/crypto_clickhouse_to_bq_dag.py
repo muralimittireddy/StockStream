@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime
-from clickhouse_to_bq import ingest_data
+from crypto_clickhouse_to_bq import ingest_data
 from datetime import timedelta
 import pendulum
 
@@ -18,9 +18,9 @@ default_args = {
 
 with DAG(
     default_args=default_args,
-    dag_id='clickhouse_to_bq_and_dbt',
+    dag_id='crypto_clickhouse_to_bq',
     start_date=datetime(2025, 5, 3),
-    schedule_interval='5 20 * * 1-5',
+    schedule_interval='5 00 * * *',
     catchup=False,
     tags=["market"]
 ) as dag:
@@ -37,7 +37,7 @@ with DAG(
 
     execute_dbt_task = BashOperator(
         task_id='dbt_run_ohlcv_models',
-        bash_command='cd /dbt && dbt run --select stg_ohlcv agg_daily_ohlcv --profiles-dir . --target prod'
+        bash_command='cd /dbt && dbt run --select crypto_stg_ohlcv crypto_top_movers --profiles-dir . --target prod'
     )
 
     ingest_task >> initate_dbt_task >> execute_dbt_task

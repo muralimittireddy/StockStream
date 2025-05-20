@@ -19,7 +19,7 @@ WITH daily_prices AS (
             ORDER BY ts
             ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
         ) AS close_price
-    FROM {{ ref('stg_ohlcv') }}
+    FROM {{ ref('crypto_stg_ohlcv') }}
     {% if is_incremental() %}
         WHERE DATE(ts) >= CURRENT_DATE() - INTERVAL 1 DAY
     {% endif %}
@@ -43,10 +43,7 @@ filtered AS (
     SELECT *
     FROM deduplicated
     WHERE
-        category IN ('stocks', 'etfs', 'currencies', 'indices')
-        AND EXTRACT(DAYOFWEEK FROM trade_day) BETWEEN 2 AND 6
-    
-
+        category = 'crypto_currency' 
 ),
 
 -- Rank gainers and losers per category per trade_day

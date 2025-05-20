@@ -1,4 +1,4 @@
--- models/staging/stock_stg_ohlcv.sql
+-- models/staging/crypto_stg_ohlcv.sql
 
 WITH raw AS (
   SELECT
@@ -10,7 +10,7 @@ WITH raw AS (
     CAST(close AS FLOAT64) AS close,
     CAST(volume AS FLOAT64) AS volume,
     category  -- assumed to exist in your raw table
-  FROM `solarcropsanalysis-454507.ohlcv_dataset.stocks_ohlcv_table`
+  FROM `solarcropsanalysis-454507.ohlcv_dataset.crypto_ohlcv_table`
 )
 
 SELECT * FROM raw

@@ -18,18 +18,18 @@ def ingest_data():
         clickhouse_client = get_client(host='clickhouse', port=8123, username='user', password='user_password')
 
         # Query only data from the exact hour
-        today = datetime.now(timezone.utc).date()
+        yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).date()
 
         query = f"""
             SELECT * FROM stock.ohlcv_data
-            WHERE toDate(timestamp) = toDate('{today}')
+            WHERE toDate(timestamp) = toDate('{yesterday}') and category='crypto_currency'
         """
 
         logger.info(f"Running query: {query}")
         result = clickhouse_client.query(query)
 
         if not result.result_rows:
-            logger.warning(f"No data found for the time window for {today} .")
+            logger.warning(f"No data found for the time window for {yesterday} .")
             return
 
         df = pd.DataFrame(result.result_rows, columns=result.column_names)  # Option 1
@@ -38,13 +38,13 @@ def ingest_data():
         bq_client = bigquery.Client()
 
         # Ensure the destination table exists, or else handle accordingly
-        table_id = 'solarcropsanalysis-454507.ohlcv_dataset.stocks_ohlcv_table'
+        table_id = 'solarcropsanalysis-454507.ohlcv_dataset.crypto_ohlcv_table'
         logger.info(f"Loading data to BigQuery table: {table_id}")
 
         job = bq_client.load_table_from_dataframe(df, table_id)
         job.result()  # Wait for the job to complete
 
-        logger.info(f"Loaded OHLCV data of {today}  into BigQuery.")
+        logger.info(f"Loaded OHLCV data of {yesterday}  into BigQuery.")
 
     except Exception as e:
         logger.error(f"Error occurred during ingestion: {str(e)}")
