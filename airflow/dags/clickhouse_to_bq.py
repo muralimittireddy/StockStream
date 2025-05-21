@@ -22,7 +22,7 @@ def ingest_data():
 
         query = f"""
             SELECT * FROM stock.ohlcv_data
-            WHERE toDate(timestamp) = toDate('{today}')
+            WHERE toDate(timestamp) = toDate('{today}') and category IN ('stocks', 'etfs', 'currencies', 'indices')
         """
 
         logger.info(f"Running query: {query}")
