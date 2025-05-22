@@ -20,7 +20,7 @@ with DAG(
     default_args=default_args,
     dag_id='clickhouse_to_bq_and_dbt',
     start_date=datetime(2025, 5, 3),
-    schedule_interval='5 20 * * 1-5',
+    schedule_interval='5 16 * * 1-5',
     catchup=False,
     tags=["market"]
 ) as dag:
