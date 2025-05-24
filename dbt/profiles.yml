@@ -1,4 +1,4 @@
-ohlcv_profile:
+ohlcv_profile: 
   target: prod
   outputs:
     prod:
