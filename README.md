@@ -47,7 +47,6 @@ This project implements a real-time data pipeline for processing **OHLCV (Open, 
     KAFKA_BROKER=kafka:29092
     KAFKA_TOPIC=test-topic
     AIRFLOW_PROJ_DIR=./airflow
-    jobs_dir=.
     AIRFLOW_UID=1001
 
     POSTGRES_USER=airflow
