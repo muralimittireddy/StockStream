@@ -42,7 +42,11 @@ This project implements a real-time data pipeline for processing **OHLCV (Open, 
     ```
 
 2. **Create a `.env` File**
-    Add environment variables for Kafka and Airflow:
+    Copy the provided example and adjust values as needed:
+    ```bash
+    cp .env.example .env
+    ```
+    Then edit `.env` to specify your Kafka and Airflow settings:
     ```
     KAFKA_BROKER=kafka:29092
     KAFKA_TOPIC=test-topic
@@ -54,6 +58,7 @@ This project implements a real-time data pipeline for processing **OHLCV (Open, 
     POSTGRES_DB=airflow
     ```
     The `.env` file is listed in `.gitignore` so credentials aren't committed.
+    The `.env.example` file provides a template you can share safely.
 
 3. **Start Core Services**
     ```bash
@@ -89,7 +94,7 @@ This project implements a real-time data pipeline for processing **OHLCV (Open, 
     ├── dbt/
     ├── docker/
     ├── producer/
-    ├── .env
+    ├── .env.example
     ├── docker-compose.airflow.yml
     ├── docker-compose.yml
     ├── requirements.txt

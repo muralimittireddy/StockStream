@@ -28,7 +28,7 @@ try:
     print("Kafka producer created successfully")
 except Exception as e:
     print(f"Failed to create Kafka producer: {e}")
-    time.sleep(10)
+    systime.sleep(10)
     exit(1)
 
 # Kafka Admin
@@ -38,7 +38,7 @@ try:
     )
 except Exception as e:
     print(f"Failed to create Kafka AdminClient: {e}")
-    time.sleep(10)
+    systime.sleep(10)
     exit(1)
 
 
