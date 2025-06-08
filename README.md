@@ -41,16 +41,30 @@ This project implements a real-time data pipeline for processing **OHLCV (Open, 
     cd <project-folder>
     ```
 
-2. **Environment Variables**
-    - Configure `.env` files or set environment variables for Kafka, ClickHouse, BigQuery credentials, etc.
+2. **Create a `.env` File**
+    Add environment variables for Kafka and Airflow:
+    ```
+    KAFKA_BROKER=kafka:29092
+    KAFKA_TOPIC=test-topic
+    AIRFLOW_PROJ_DIR=./airflow
+    jobs_dir=.
+    AIRFLOW_UID=1001
 
-3. **Build and Run with Docker**
+    POSTGRES_USER=airflow
+    POSTGRES_PASSWORD=airflow
+    POSTGRES_DB=airflow
+    ```
+    The `.env` file is listed in `.gitignore` so credentials aren't committed.
+
+3. **Start Core Services**
     ```bash
-    docker-compose up --build
+    docker-compose up
     ```
 
-4. **Initialize Airflow**
-    - Set up Airflow by initializing the database and starting the webserver and scheduler.
+4. **Run Airflow**
+    ```bash
+    docker-compose -f docker-compose.airflow.yml up
+    ```
 
 5. **Start the Pipeline**
     - Start the Kafka producer (simulate or connect to a live data feed).
